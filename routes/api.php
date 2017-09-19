@@ -17,3 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Tests
+Route::get("/test", "TestController@methodGET");
+Route::post("/test", "TestController@methodPOST");
+Route::delete("/test", "TestController@methodDELETE");
+Route::put("/test", "TestController@methodPUT");
+Route::patch("/test", "TestController@methodPATCH");
