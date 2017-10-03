@@ -13,13 +13,18 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::get("current", function(Request $request) {
     return $request->user();
-});
+})->middleware("auth:api");
+
+Route::post("login", "AuthController@login");
+
+// Resources routes
+Route::resource("users", "UserController");
 
 // Tests
-Route::get("/test", "TestController@methodGET");
-Route::post("/test", "TestController@methodPOST");
-Route::delete("/test", "TestController@methodDELETE");
-Route::put("/test", "TestController@methodPUT");
-Route::patch("/test", "TestController@methodPATCH");
+Route::get("test", "TestController@methodGET");
+Route::post("test", "TestController@methodPOST");
+Route::delete("test", "TestController@methodDELETE");
+Route::put("test", "TestController@methodPUT");
+Route::patch("test", "TestController@methodPATCH");

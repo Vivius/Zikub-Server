@@ -19,7 +19,7 @@ class TestController extends Controller
 
     public function methodDELETE()
     {
-        return [true];
+        return User::all();
     }
 
     public function methodPUT(Request $request)
