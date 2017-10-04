@@ -47,4 +47,8 @@ class UserController extends Controller
     {
         //
     }
+
+    public function current(Request $request) {
+        return $request->user();
+    }
 }
