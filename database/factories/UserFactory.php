@@ -13,6 +13,20 @@ use Faker\Generator as Faker;
 |
 */
 
+/**
+ * Fonction permettant de retourner un identifiant existant s'il existe au moins une occurence de la classe demandée
+ * en base de données.
+ * Dans le cas contraire, on crée une nouvelle occurence en base en retournant son identifiant.
+ * @param $class
+ * @return mixed
+ */
+function getId ($class) {
+    if($class::count() > 0)
+        return $class::inRandomOrder()->first()->id;
+    else
+        return factory($class)->create()->id;
+}
+
 $factory->define(App\User::class, function (Faker $faker) {
     static $password;
 
@@ -21,5 +35,24 @@ $factory->define(App\User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+    ];
+});
+
+$factory->define(App\Playlist::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'description' => $faker->realText(),
+        'user_id' => getId(\App\User::class)
+    ];
+});
+
+$factory->define(App\Music::class, function (Faker $faker) {
+    return [
+        'title' => $faker->colorName,
+        'author' => $faker->firstName.' '.$faker->lastName,
+        'duration' => $faker->numberBetween(60, 360),
+        'cover' => $faker->imageUrl(),
+        'url' => $faker->url,
+        'playlist_id' => getId(\App\Playlist::class)
     ];
 });
