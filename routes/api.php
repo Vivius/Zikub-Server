@@ -19,9 +19,12 @@ Route::post("register", "AuthController@register");
 
 // User
 Route::get("users/current", "UserController@current");
+Route::get("playlist/get", "PlaylistController@get");
 
 // Resources routes
 Route::resource("users", "UserController");
+Route::resource("playlists", "PlaylistController");
+Route::resource("musics", "MusicController");
 
 // Tests
 Route::get("test", "TestController@methodGET");
@@ -29,3 +32,7 @@ Route::post("test", "TestController@methodPOST");
 Route::delete("test", "TestController@methodDELETE");
 Route::put("test", "TestController@methodPUT");
 Route::patch("test", "TestController@methodPATCH");
+
+Route::get("toto", function() {
+    return \App\User::find(1)->playlist()->with("musics")->first();
+});

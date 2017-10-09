@@ -7,5 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Playlist extends Model
 {
     protected $table = "playlists";
-    //
+
+    public function musics() {
+        return $this->hasMany('App\Music');
+    }
 }
