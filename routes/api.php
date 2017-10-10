@@ -21,6 +21,9 @@ Route::post("register", "AuthController@register");
 Route::get("users/current", "UserController@current");
 Route::get("playlist/get", "PlaylistController@get");
 
+// Youtube
+Route::get("youtube/search/{query}", "YoutubeApiController@search");
+
 // Resources routes
 Route::resource("users", "UserController");
 Route::resource("playlists", "PlaylistController");
@@ -34,5 +37,6 @@ Route::put("test", "TestController@methodPUT");
 Route::patch("test", "TestController@methodPATCH");
 
 Route::get("toto", function() {
-    return \App\User::find(1)->playlist()->with("musics")->first();
+    $youtubeApi = new \App\YoutubeApi();
+    return $youtubeApi->search("lady gaga", 10);
 });
