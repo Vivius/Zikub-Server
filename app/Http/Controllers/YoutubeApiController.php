@@ -14,6 +14,6 @@ class YoutubeApiController extends Controller
 
     public function search($query) {
         $youtubeApi = new YoutubeApi();
-        return $youtubeApi->search($query, 10);
+        return $youtubeApi->search($query, 25);
     }
 }

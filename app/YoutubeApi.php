@@ -29,7 +29,8 @@ class YoutubeApi extends Model
     {
         $searchResponse = $this->youtube->search->listSearch('id, snippet', array(
             'q' => $keyword,
-            'maxResults' => $nbResults
+            'maxResults' => $nbResults,
+            'type' => "video"
         ));
 
         $musics = [];
@@ -38,7 +39,6 @@ class YoutubeApi extends Model
                 case 'youtube#video':
                     $music = new Music();
                     $music->title = $searchResult['snippet']['title'];
-                    $music->author = "test";
                     $music->cover = $searchResult['snippet']['thumbnails']['default']['url'];
                     $music->url = "https://www.youtube.com/watch?v=".$searchResult['id']['videoId'];
                     $music->author = $searchResult["snippet"]["channelTitle"];
