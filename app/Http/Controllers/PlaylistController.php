@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Music;
+use App\Playlist;
 use Illuminate\Http\Request;
+use Validator;
 
 class PlaylistController extends Controller
 {
@@ -96,5 +99,37 @@ class PlaylistController extends Controller
     public function get(Request $request)
     {
         return $request->user()->playlist()->with("musics")->first();
+    }
+
+    /**
+     * Updates the current playlist of the user.
+     * Sets the given music to the given rank.
+     *
+     * @param Request $request
+     * @return \Response
+     */
+    public function udpateList(Request $request) {
+        $validator = Validator::make($request->all(), [
+            "title" => "required",
+            "author" => "required",
+            "cover" => "required",
+            "url" => "required",
+            "rank" => "required|numeric"
+        ]);
+
+        if($validator->fails()) {
+            return abort(400);
+        } else {
+            $playlist = $request->user()->playlist()->first();
+            $playlist->musics()->where("rank", $request->rank)->delete();
+            return Music::create([
+                "title" => $request->title,
+                "author" => $request->author,
+                "cover" => $request->cover,
+                "url" => $request->url,
+                "rank" => $request->rank,
+                "playlist_id" => $playlist->id
+            ]);
+        }
     }
 }

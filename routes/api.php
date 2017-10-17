@@ -24,6 +24,9 @@ Route::get("playlist/get", "PlaylistController@get");
 // Youtube
 Route::get("youtube/search/{query}", "YoutubeApiController@search");
 
+// Playlist
+Route::patch("playlist/update/list", "PlaylistController@udpateList");
+
 // Resources routes
 Route::resource("users", "UserController");
 Route::resource("playlists", "PlaylistController");

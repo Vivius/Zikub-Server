@@ -18,10 +18,9 @@ class CreateMusicsTable extends Migration
             $table->timestamps();
             $table->string("title");
             $table->string("author");
-            $table->integer("duration")->nullable();
             $table->string("cover")->nullable();
-            $table->string("provider")->default("youtube");
             $table->string("url");
+            $table->integer("rank");
             $table->integer("playlist_id")->unsigned();
         });
     }

@@ -50,7 +50,7 @@ $factory->define(App\Music::class, function (Faker $faker) {
     return [
         'title' => $faker->colorName,
         'author' => $faker->firstName.' '.$faker->lastName,
-        'duration' => $faker->numberBetween(60, 360),
+        'rank' => $faker->numberBetween(1, 5),
         'cover' => $faker->imageUrl(),
         'url' => $faker->url,
         'playlist_id' => getId(\App\Playlist::class)
