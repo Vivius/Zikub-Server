@@ -39,7 +39,7 @@ class YoutubeApi extends Model
                 case 'youtube#video':
                     $music = new Music();
                     $music->title = $searchResult['snippet']['title'];
-                    $music->cover = $searchResult['snippet']['thumbnails']['default']['url'];
+                    $music->cover = $searchResult['snippet']['thumbnails']['medium']['url'];
                     $music->url = "https://www.youtube.com/watch?v=".$searchResult['id']['videoId'];
                     $music->author = $searchResult["snippet"]["channelTitle"];
                     array_push($musics, $music);
