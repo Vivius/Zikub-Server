@@ -40,6 +40,6 @@ Route::put("test", "TestController@methodPUT");
 Route::patch("test", "TestController@methodPATCH");
 
 Route::get("toto", function() {
-    $youtubeApi = new \App\YoutubeApi();
-    return $youtubeApi->search("lady gaga", 10);
+    $music = \App\Music::find(11);
+    return $music->playlist()->first()->user_id;
 });

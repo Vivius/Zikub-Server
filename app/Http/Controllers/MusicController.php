@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Music;
+use App\Playlist;
 use Illuminate\Http\Request;
 
 class MusicController extends Controller
@@ -77,13 +79,29 @@ class MusicController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprime une musique et calcul les nouveaux rangs de la playliste associée.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        $music = Music::find($id);
+        $playlist = Playlist::find($music->playlist_id);
+        if(\Gate::allows('musics.delete', $music)) {
+            $music->delete();
+            // Calcul des nouveaux rangs.
+            $musics = $playlist->musics()->orderBy("rank")->get();
+            $cpt = 1;
+            foreach ($musics as $m) {
+                if($m->rank > $cpt) {
+                    $m->rank = $cpt;
+                    $m->save();
+                }
+                $cpt++;
+            }
+            return $musics;
+        }
+        return abort(403);
     }
 }
