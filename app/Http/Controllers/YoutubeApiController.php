@@ -12,7 +12,8 @@ class YoutubeApiController extends Controller
         $this->middleware("auth:api");
     }
 
-    public function search($query) {
+    public function search($query)
+    {
         $youtubeApi = new YoutubeApi();
         return $youtubeApi->search($query, 25);
     }

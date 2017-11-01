@@ -10,7 +10,7 @@ use Auth;
 class AuthController extends Controller
 {
     /**
-     * Login the user and returns a new oauth token for the api if success.
+     * Connecte l'utilisateur à l'application en lui retournant un token d'authentification.
      *
      * @param Request $request
      * @return string
@@ -35,8 +35,8 @@ class AuthController extends Controller
     }
 
     /**
-     * Register a new user.
-     * If success, returns a oauth token for the api.
+     * Inscrit un nouvel utilisateur.
+     * Si l'opération réussie, un token permanent est retourné.
      *
      * @param Request $request
      * @return string

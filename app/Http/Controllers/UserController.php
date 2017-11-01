@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Response;
-use App\User;
 
 class UserController extends Controller
 {
@@ -13,42 +12,14 @@ class UserController extends Controller
         $this->middleware("auth:api");
     }
 
-    public function index()
+    /**
+     * Retourne l'utilisateur actuellement authentifié.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function current(Request $request)
     {
-        return User::all();
-    }
-
-    public function create()
-    {
-        //
-    }
-
-    public function store()
-    {
-        //
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update($id)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function current(Request $request) {
         return $request->user();
     }
 }

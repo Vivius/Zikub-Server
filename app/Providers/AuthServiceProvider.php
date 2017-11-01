@@ -28,10 +28,12 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
         Passport::routes();
 
-        // Musics
-
+        // Music
         Gate::define('musics.delete', function($user, $music) {
             return $music->playlist()->first()->user_id == $user->id;
+        });
+        Gate::define('musics.post', function ($user, $playlist) {
+            return $playlist->user_id == $user->id;
         });
     }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Music;
 use App\Playlist;
 use Illuminate\Http\Request;
+use Validator;
+use Gate;
 
 class MusicController extends Controller
 {
@@ -14,81 +16,54 @@ class MusicController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Permet d'ajouter une nouvelle musique à la playliste de l'utilisateur actuel.
+     * Si une musique existe déjà pour le 'rank' demandé elle sera supprimée automatiquement.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Response
      */
-    public function index()
+    public function post(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            "title" => "required",
+            "author" => "required",
+            "cover" => "required",
+            "url" => "required",
+            "rank" => "required|numeric",
+            "playlist_id" => "required|numeric"
+        ]);
+
+        if($validator->fails()) {
+            return abort(400);
+        } else {
+            $playlist = $request->user()->playlist()->first();
+            if(Gate::allows('musics.post', $playlist)) {
+                $playlist->musics()->where("rank", $request->rank)->delete();
+                return Music::create([
+                    "title" => $request->title,
+                    "author" => $request->author,
+                    "cover" => $request->cover,
+                    "url" => $request->url,
+                    "rank" => $request->rank,
+                    "playlist_id" => $playlist->id
+                ]);
+            } else {
+                return abort(403);
+            }
+        }
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
+     * Supprime une musique et calcul les nouveaux 'rank' de la playliste associée.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Supprime une musique et calcul les nouveaux rangs de la playliste associée.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function delete($id)
     {
         $music = Music::find($id);
         $playlist = Playlist::find($music->playlist_id);
-        if(\Gate::allows('musics.delete', $music)) {
+        if(Gate::allows('musics.delete', $music)) {
             $music->delete();
             // Calcul des nouveaux rangs.
             $musics = $playlist->musics()->orderBy("rank")->get();

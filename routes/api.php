@@ -19,18 +19,16 @@ Route::post("register", "AuthController@register");
 
 // User
 Route::get("users/current", "UserController@current");
-Route::get("playlist/get", "PlaylistController@get");
 
 // Youtube
 Route::get("youtube/search/{query}", "YoutubeApiController@search");
 
 // Playlist
-Route::patch("playlist/update/list", "PlaylistController@udpateList");
+Route::get("playlist/get", "PlaylistController@get");
 
-// Resources routes
-Route::resource("users", "UserController");
-Route::resource("playlists", "PlaylistController");
-Route::resource("musics", "MusicController");
+// Music
+Route::post("musics", "MusicController@post");
+Route::delete("musics/{id}", "MusicController@delete");
 
 // Tests
 Route::get("test", "TestController@methodGET");
