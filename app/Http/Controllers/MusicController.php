@@ -36,7 +36,7 @@ class MusicController extends Controller
         if($validator->fails()) {
             return abort(400);
         } else {
-            $playlist = $request->user()->playlist()->first();
+            $playlist = $request->user()->playlists()->orderBy("created_at", "desc")->first();
             if(Gate::allows('musics.post', $playlist)) {
                 $playlist->musics()->where("rank", $request->rank)->delete();
                 return Music::create([

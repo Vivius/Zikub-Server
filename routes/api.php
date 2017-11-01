@@ -25,6 +25,7 @@ Route::get("youtube/search/{query}", "YoutubeApiController@search");
 
 // Playlist
 Route::get("playlist/get", "PlaylistController@get");
+Route::post("playlists", "PlaylistController@post");
 
 // Music
 Route::post("musics", "MusicController@post");

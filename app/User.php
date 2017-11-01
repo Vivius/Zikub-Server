@@ -32,7 +32,7 @@ class User extends Authenticatable
         return $this->hasMany('App\OauthAccessToken');
     }
 
-    public function playlist() {
-        return $this->hasOne('App\Playlist');
+    public function playlists() {
+        return $this->hasMany('App\Playlist');
     }
 }
