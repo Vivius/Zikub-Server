@@ -6,6 +6,7 @@ use App\Music;
 use App\Playlist;
 use Illuminate\Http\Request;
 use Validator;
+use Gate;
 
 class PlaylistController extends Controller
 {
@@ -15,22 +16,22 @@ class PlaylistController extends Controller
     }
 
     /**
-     * Obtient la playlist de l'utilisateur actuel.
+     * Obtient la playlist actuelle de l'utilisateur (dernière playliste créée).
      *
      * @param Request $request
      * @return \Response
      */
-    public function get(Request $request)
+    public function current(Request $request)
     {
         return $request->user()->playlists()->orderBy("created_at", "desc")->with("musics")->first();
     }
 
     /**
-     * Crée une nouvelle playliste.
+     * Permet de mettre à jour la playliste demandée.
      *
      * @param Request $request
      */
-    public function post(Request $request)
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             "name" => "required",
@@ -40,28 +41,57 @@ class PlaylistController extends Controller
         if($validator->fails()) {
             return abort(400);
         } else {
-            $playlist = Playlist::create([
+            $playlist = Playlist::find($id);
+            if(Gate::allows('playlists.put', $playlist)) {
+                $playlist->update([
+                    "name" => $request->name,
+                    "description" => $request->description
+                ]);
+                return $playlist;
+            } else {
+                return abort(403);
+            }
+        }
+    }
+
+    /**
+     * Crée une nouvelle playliste qui se base sur l'ancienne si disponible.
+     *
+     * @param Request $request
+     */
+    public function create(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "name" => "required",
+            "description" => "required",
+        ]);
+
+        if($validator->fails()) {
+            return abort(400);
+        } else {
+            $newPlaylist = Playlist::create([
                 "name" => $request->name,
                 "description" => $request->description,
                 "user_id" => $request->user()->id
             ]);
 
-            // Ajoute les musiques de l'ancienne playliste à la nouvelle playliste.
+            // Ajoute les musiques de l'ancienne playliste à la nouvelle playliste pour que l'utilisateur ait encore accès à ses morceaux.
             $playlists = $request->user()->playlists()->orderBy("created_at", "desc")->get();
             if(count($playlists) > 1) {
-                foreach ($playlists[1]->musics()->get() as $music) {
+                $oldPlaylist = $playlists[1]->musics()->get();
+                foreach ($oldPlaylist as $music) {
                     Music::create([
                         "title" => $music->title,
                         "author" => $music->author,
                         "cover" => $music->cover,
                         "url" => $music->url,
                         "rank" => $music->rank,
-                        "playlist_id" => $playlist->id
+                        "playlist_id" => $newPlaylist->id
                     ]);
                 }
             }
 
-            return $playlist;
+            return $newPlaylist;
         }
     }
 }

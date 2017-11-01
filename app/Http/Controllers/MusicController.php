@@ -16,13 +16,13 @@ class MusicController extends Controller
     }
 
     /**
-     * Permet d'ajouter une nouvelle musique à la playliste de l'utilisateur actuel.
-     * Si une musique existe déjà pour le 'rank' demandé elle sera supprimée automatiquement.
+     * Permet d'ajouter une nouvelle musique à une playliste.
+     * Si une musique existe déjà pour le 'rank' demandé elle sera supprimée automatiquement et remplacée.
      *
      * @param Request $request
      * @return \Response
      */
-    public function post(Request $request)
+    public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
             "title" => "required",

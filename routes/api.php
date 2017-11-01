@@ -24,11 +24,12 @@ Route::get("users/current", "UserController@current");
 Route::get("youtube/search/{query}", "YoutubeApiController@search");
 
 // Playlist
-Route::get("playlist/get", "PlaylistController@get");
-Route::post("playlists", "PlaylistController@post");
+Route::get("playlists/current", "PlaylistController@current");
+Route::put("playlists/{id}", "PlaylistController@update");
+Route::post("playlists", "PlaylistController@create");
 
 // Music
-Route::post("musics", "MusicController@post");
+Route::post("musics", "MusicController@create");
 Route::delete("musics/{id}", "MusicController@delete");
 
 // Tests

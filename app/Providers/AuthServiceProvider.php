@@ -35,5 +35,10 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('musics.post', function ($user, $playlist) {
             return $playlist->user_id == $user->id;
         });
+
+        // Playlist
+        Gate::define('playlists.put', function ($user, $playlist) {
+            return $playlist->user_id == $user->id;
+        });
     }
 }
