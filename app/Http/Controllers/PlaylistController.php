@@ -23,7 +23,19 @@ class PlaylistController extends Controller
      */
     public function current(Request $request)
     {
-        return $request->user()->playlists()->orderBy("created_at", "desc")->with("musics")->first();
+        return $request->user()->playlists()->orderBy("created_at", "desc")->with("musics", "user")->first();
+    }
+
+    /**
+     * Permet d'obtenir une playliste avec son ID.
+     *
+     * @param $id
+     * @return \Response
+     */
+    public function get($id)
+    {
+        $playlist = Playlist::where("id", $id)->with("musics", "user")->first();
+        return $playlist ? $playlist : abort(400);
     }
 
     /**

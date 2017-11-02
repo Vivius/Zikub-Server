@@ -54,6 +54,7 @@ class AuthController extends Controller
             return abort(400);
         } else {
            $user = (new User())->create($request->all());
+           // TODO : créer une playliste par défaut.
            return $user->createToken("Zikub Android")->accessToken;
         }
     }

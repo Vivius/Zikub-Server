@@ -25,6 +25,7 @@ Route::get("youtube/search/{query}", "YoutubeApiController@search");
 
 // Playlist
 Route::get("playlists/current", "PlaylistController@current");
+Route::get("playlists/{id}", "PlaylistController@get");
 Route::put("playlists/{id}", "PlaylistController@update");
 Route::post("playlists", "PlaylistController@create");
 
