@@ -42,6 +42,7 @@ class PlaylistController extends Controller
      * Permet de mettre à jour la playliste demandée.
      *
      * @param Request $request
+     * @return \Response
      */
     public function update(Request $request, $id)
     {
@@ -70,6 +71,7 @@ class PlaylistController extends Controller
      * Crée une nouvelle playliste qui se base sur l'ancienne si disponible.
      *
      * @param Request $request
+     * @return \Response
      */
     public function create(Request $request)
     {
