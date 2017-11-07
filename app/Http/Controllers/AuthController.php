@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Playlist;
 use App\User;
 use Illuminate\Http\Request;
 use Validator;
@@ -44,7 +45,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            "name" => "required|min:6",
+            "name" => "required|min:4",
             "email" => "required|email",
             "password" => "required|min:6|confirmed",
             "password_confirmation" => "required"
@@ -53,9 +54,15 @@ class AuthController extends Controller
         if($validator->fails()) {
             return abort(400);
         } else {
-           $user = (new User())->create($request->all());
-           // TODO : créer une playliste par défaut.
-           return $user->createToken("Zikub Android")->accessToken;
+            $data = $request->all();
+            $data["password"] = bcrypt($data["password"]);
+            $user = (new User())->create($data);
+            Playlist::create([
+                "name" => "Première playlist",
+                "description" => "En attente de construction...",
+                "user_id" => $user->id
+            ]);
+            return $user->createToken("Zikub Android")->accessToken;
         }
     }
 }
